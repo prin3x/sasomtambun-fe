@@ -8,6 +8,7 @@ import { ReactComponent as Knowledge } from '../../assets/svg/knowledge.svg';
 import { ReactComponent as Csc } from '../../assets/svg/csc.svg';
 import { ReactComponent as Challenge } from '../../assets/svg/challenge.svg';
 import { ReactComponent as Project } from '../../assets/svg/project.svg';
+import { MainSectionHeader } from '../styled-components/utilities';
 
 const { TabPane } = Tabs;
 
@@ -31,10 +32,7 @@ const Subtitle = styled.h3`
   font-size: 1.5rem;
   font-weight: 300;
 `;
-const Title = styled.h1`
-  font-size: 2rem;
-  margin-left: 22rem;
-`;
+
 
 export default function ActivitiesTab({ rows }) {
   function callback(key) {
@@ -47,7 +45,7 @@ export default function ActivitiesTab({ rows }) {
 
   return (
     <ActivityShowcaseContainer>
-      <Title>กิจกรรม</Title>
+      <MainSectionHeader>กิจกรรม</MainSectionHeader>
       <Tabs
         defaultActiveKey='1'
         onChange={callback}

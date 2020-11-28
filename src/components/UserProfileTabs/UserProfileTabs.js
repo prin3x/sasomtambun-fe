@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Tabs } from 'antd';
 import UserInfoContainer from '../UserInfoContainer/UserInfoContainer';
 import styled from 'styled-components';
@@ -8,6 +8,7 @@ import UserDonationHistory from '../UserDonationHistory/UserDonationHistory';
 const { TabPane } = Tabs;
 
 const AlterAntd = styled.div`
+  margin-top: 5rem;
   width: 100%;
   height: 100%;
   .ant-tabs-tab {
@@ -19,18 +20,15 @@ const AlterAntd = styled.div`
       margin-right: 1.5rem;
     }
     @media screen and (max-width: 380px) {
-      margin-right: 0;
+      margin-right: 1rem;
     }
   }
 `;
 
 export default function UserProfileTabs() {
-  function callback(key) {
-    console.log(key);
-  }
   return (
     <AlterAntd>
-      <Tabs defaultActiveKey='1' onChange={callback} centered size='large'>
+      <Tabs defaultActiveKey='1'centered size='large'>
         <TabPane tab={'โปรไฟล์ของฉัน'} key='1'>
           <UserInfoContainer />
         </TabPane>

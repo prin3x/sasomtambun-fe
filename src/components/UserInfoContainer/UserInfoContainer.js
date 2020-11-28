@@ -10,9 +10,8 @@ const { Text } = Typography;
 const Wrapper = styled.div`
   display: flex;
   width: 100vw;
-  @media screen and (max-width: 1280px) {
-  }
-  @media screen and (max-width: 770px) {
+
+  @media screen and (max-width: 800px) {
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -31,8 +30,11 @@ const ControllerContainer = styled.div`
   @media screen and (max-width: 1280px) {
     width: 20rem;
   }
-  @media screen and (max-width: 770px) {
+  @media screen and (max-width: 800px) {
     width: 40rem;
+  }
+  @media screen and (max-width: 720px) {
+    width: 30rem;
   }
   @media screen and (max-width: 420px) {
     width: 23.4rem;
@@ -62,19 +64,25 @@ const InfoContainer = styled.div`
   margin-left: 3rem;
   padding: 2rem 4rem;
   position: relative;
-  @media screen and (max-width: 1280px) {
-    width: 35rem;
+  @media screen and (max-width: 1200px) {
+    width: 39rem;
+    margin-left: 2rem;
   }
-  @media screen and (max-width: 770px) {
-    margin-left: 0;
+  @media screen and (max-width: 950px) {
+    width: 32rem;
+    margin-left: 2rem;
+  }
+  @media screen and (max-width: 800px) {
     margin-top: 2rem;
     width: 40rem;
+    margin-left: 0rem;
+  }
+  @media screen and (max-width: 720px) {
+    padding: 2rem;
+    width: 30rem;
   }
   @media screen and (max-width: 420px) {
     width: 23.4rem;
-  }
-  @media screen and (max-width: 380px) {
-    width: 23.25rem;
   }
 `;
 
@@ -85,6 +93,14 @@ const AccountInfo = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: start;
+  @media screen and (max-width: 1280px) {
+  }
+  @media screen and (max-width: 800px) {
+  }
+  @media screen and (max-width: 420px) {
+  }
+  @media screen and (max-width: 380px) {
+  }
 `;
 
 const FieldContainer = styled.div`
@@ -95,6 +111,9 @@ const FieldContainer = styled.div`
   min-width: 20rem;
   &:nth-of-type(2) {
     margin-left: 1rem;
+  }
+  @media screen and (max-width: 420px) {
+    min-width: 12.5rem;
   }
 `;
 const FieldWrapper = styled.div`

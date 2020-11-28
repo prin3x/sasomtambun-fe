@@ -6,13 +6,13 @@ const ProfilePageBackground = styled.div`
   background: #e5e5e5;
   padding: 1rem 20rem;
   @media screen and (max-width: 1280px) {
-    padding: 1rem 10rem;
+    padding: 1rem;
   }
   @media screen and (max-width: 770px) {
-    padding: 0;
+    padding: 0.5rem;
   }
-  @media screen and (max-width: 380px) {
-    padding: 0 0;
+  @media screen and (max-width: 420px) {
+    padding: 0.25rem;
   }
 `;
 

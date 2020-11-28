@@ -6,12 +6,25 @@ export const ActivityContent = styled.div`
   background: ${(props) => props.backgroundColor};
   @media screen and (max-width: 1280px) {
     padding: 2rem 5rem;
+    .ant-row {
+      .ant-col {
+        margin: 0 2.5rem;
+      }
+    }
+  }
+  @media screen and (max-width: 900px) {
+    padding: 2rem 5rem;
+    .ant-row {
+      .ant-col {
+        margin: 1rem 0.75rem;
+      }
+    }
   }
   @media screen and (max-width: 770px) {
-    padding: 2rem;
+    padding: 2rem 4rem;
   }
   @media screen and (max-width: 380px) {
-    padding: 2rem 0;
+    padding: 2rem 2rem;
   }
 `;
 
@@ -34,6 +47,16 @@ export const Title = styled.h1`
   margin-top: 1rem;
   font-size: 2rem;
   color: ${(props) => props.color};
+  @media (max-width: 1300px) {
+  }
+  @media (max-width: 800px) {
+  }
+  @media (max-width: 600px) {
+  }
+  @media (max-width: 500px) {
+  }
+  @media (max-width: 450px) {
+  }
 `;
 
 export const Lead = styled.p`
@@ -67,4 +90,25 @@ export const InputInfo = styled.p`
 export const LayoutContainer = styled.section`
   width: 100vw;
   height: 100vh;
+`;
+
+export const MainSectionHeader = styled.h1`
+  text-align: center;
+  font-size: 2rem;
+  margin-left: auto;
+  @media (max-width: 1300px) {
+    font-size: 2rem;
+  }
+  @media (max-width: 800px) {
+    font-size: 2rem;
+  }
+  @media (max-width: 600px) {
+    font-size: 2rem;
+  }
+  @media (max-width: 500px) {
+    font-size: 2rem;
+  }
+  @media (max-width: 450px) {
+    font-size: 2rem;
+  }
 `;

@@ -8,6 +8,7 @@ const CarouselContainer = styled.section`
   background: #96d9c9;
   display: flex;
   justify-content: center;
+  margin-top: 3.5rem;
 `;
 
 const Image = styled.img`
@@ -15,6 +16,7 @@ const Image = styled.img`
   height: 50vh;
   margin-left: auto;
   margin-right: auto;
+  object-fit: cover;
 `;
 
 export default function CarouselContent() {

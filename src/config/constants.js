@@ -1,4 +1,4 @@
-const BASE_BACKEND_URL = 'http://localhost:1337';
+const BASE_BACKEND_URL = 'https://strapi-be-for-sasomtambun.herokuapp.com';
 
 module.exports = {
   BASE_BACKEND_URL,
