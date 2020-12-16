@@ -1,5 +1,6 @@
 import { Table, Tag } from 'antd';
-import { Fragment } from 'react';
+import axios from '../../config/axios';
+import { Fragment, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import './UserHistoryTable.less';
 
@@ -11,16 +12,16 @@ const ActivityNameContainer = styled.div`
 const columns = [
   {
     title: 'กิจกรรมที่เข้าร่วม',
-    dataIndex: 'activity',
-    key: 'activity',
+    dataIndex: 'title',
+    key: 'title',
     render: (activity) => (
       <ActivityNameContainer>{activity}</ActivityNameContainer>
     ),
   },
   {
     title: 'Point ที่ได้รับ',
-    dataIndex: 'point',
-    key: 'point',
+    dataIndex: 'given_points',
+    key: 'given_points',
   },
   {
     title: 'สถานะ',
@@ -30,9 +31,9 @@ const columns = [
       <Fragment>
         <Tag
           color={
-            status === 'อนุมัติ'
+            status === 'success'
               ? 'green'
-              : status === 'รอการอนุมัติ'
+              : status === 'pending'
               ? 'blue'
               : 'red'
           }
@@ -50,30 +51,34 @@ const columns = [
   },
 ];
 
-const dataSource = [
-  {
-    key: '1',
-    activity: 'เทใจเพื่อน้อง 1',
-    point: 250,
-    status: 'รอการอนุมัติ',
-    remark: '',
-  },
-  {
-    key: '2',
-    activity: 'เทใจเพื่อน้อง 1',
-    point: 250,
-    status: 'ไม่ผ่าน',
-    remark: 'ภาพไม่ครบ',
-  },
-  {
-    key: '3',
-    activity: 'เทใจเพื่อน้อง 2',
-    point: 500,
-    status: 'อนุมัติ',
-    remark: '',
-  },
-];
-
 export default function UserHistoryTable() {
-  return <Table dataSource={dataSource} columns={columns} />;
+  const [prooHistory, setProofHistory] = useState();
+
+  useEffect(() => {
+    (async function () {
+      const { data } = await axios.get(`/proof/myproof`);
+      return setProofHistory(data);
+    })();
+    return;
+  }, []);
+
+  const rowData =
+    prooHistory &&
+    prooHistory.map((proof) => {
+      return {
+        id: proof?._id,
+        title: proof?.activity?.title,
+        given_points: proof?.activity?.given_points,
+        status: proof?.status,
+        remark: proof?.remark,
+      };
+    });
+
+  return (
+    <Table
+      columns={columns}
+      dataSource={rowData ? rowData : null}
+      rowKey={(record) => record.id}
+    />
+  );
 }

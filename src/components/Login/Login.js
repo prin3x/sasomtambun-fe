@@ -6,7 +6,6 @@ import {
   errorNotification,
   successNotification,
 } from '../antdUtils/notification';
-import { setToken } from '../../services/LocalStorageService';
 import { UserContext } from '../../context/userContext/userContext';
 
 const layout = {
@@ -20,22 +19,26 @@ const tailLayout = {
 export const Login = ({ toggleModal }) => {
   const history = useHistory();
 
-  const { loginIntoWebsite } = useContext(UserContext);
+  const { retrieveUserInfo } = useContext(UserContext);
 
   const [submitLoading, setSubmitLoading] = useState(false);
   const onFinish = async (values) => {
-    const { username, password } = values;
+    const { email, password } = values;
     try {
-      const response = await axios.post('/auth/local', {
-        identifier: username,
-        password,
-      });
-      loginIntoWebsite(response.data.jwt);
+      const { data } = await axios.post(
+        '/auth/login',
+        {
+          email,
+          password,
+        },
+        { credentials: true }
+      );
+      retrieveUserInfo();
       setTimeout(() => {
         setSubmitLoading(false);
-        successNotification('topRight');
+        successNotification();
         toggleModal();
-        history.push('/home');
+        window.location.reload();
       }, 500);
     } catch (error) {
       errorNotification('topRight');
@@ -49,14 +52,14 @@ export const Login = ({ toggleModal }) => {
   return (
     <Form
       {...layout}
-      name='basic'
+      name='login'
       initialValues={{ remember: true }}
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
     >
       <Form.Item
         label='อีเมล'
-        name='username'
+        name='email'
         rules={[{ required: true, message: 'Please input your username!' }]}
       >
         <Input />
@@ -71,11 +74,11 @@ export const Login = ({ toggleModal }) => {
         <Input.Password />
       </Form.Item>
 
-      <Form.Item {...tailLayout} name='remember' valuePropName='checked'>
+      <Form.Item name='remember' valuePropName='checked'>
         <Checkbox>Remember me</Checkbox>
       </Form.Item>
 
-      <Form.Item {...tailLayout}>
+      <Form.Item>
         <Button type='primary' htmlType='submit' loading={submitLoading}>
           Login
         </Button>

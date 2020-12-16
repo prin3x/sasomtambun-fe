@@ -1,35 +1,32 @@
-import React from 'react';
 import 'antd/dist/antd.less';
 import Navbar from './components/Navbar/Navbar';
-import { Switch, Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import Homepage from './pages/Homepage';
 import Activities from './pages/Activities';
 import Donations from './pages/Donations';
 import ActivityPage from './pages/ActivityPage';
-import { UserContextProvider } from './context/userContext/userContext';
-import PrivateRoutes from './privateRoutes/PrivateRoutes';
+import UserProfilePage from './pages/UserProfilePage';
+import AdminRoutes from './privateRoutes/AdminRoutes';
+import UserRoutes from './privateRoutes/UserRoutes';
+import { Fragment } from 'react';
+import SingleDonationPage from './pages/SingleDonationPage';
+import AdminPage from './pages/Adminpage';
 
-export default function App() {
+function App() {
   return (
-    <React.Fragment>
-      <UserContextProvider>
-        <Navbar />
-        <Switch>
-          <Route exact path='/home'>
-            <Homepage />
-          </Route>
-          <Route exact path='/activities'>
-            <Activities />
-          </Route>
-          <Route exact path='/donations'>
-            <Donations />
-          </Route>
-          <Route exact path='/activities/:id'>
-            <ActivityPage />
-          </Route>
-          <PrivateRoutes />
-        </Switch>
-      </UserContextProvider>
-    </React.Fragment>
+    <Fragment>
+      <Navbar />
+      <Switch>
+        <Route exact path='/home' component={Homepage} />
+        <Route exact path='/activities' component={Activities} />
+        <Route exact path='/donations' component={Donations} />
+        <Route exact path='/activities/:id' component={ActivityPage} />
+        <Route exact path='/donations/:id' component={SingleDonationPage} />
+        <UserRoutes exact path='/profile' component={UserProfilePage} />
+        <AdminRoutes path='/admin' component={AdminPage} />
+        <Route path='*' component={Homepage} />
+      </Switch>
+    </Fragment>
   );
 }
+export default App;

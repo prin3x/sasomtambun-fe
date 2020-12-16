@@ -3,12 +3,6 @@ export default function UserReducer(state, action) {
     case 'RETRIEVE_USER_STATUS':
       return action.payload;
 
-    case 'USER_LOGIN':
-      return 'authenticated';
-
-    case 'USER_LOGOUT':
-      return 'public';
-
     default:
       return state;
   }

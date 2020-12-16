@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment, useEffect } from 'react';
 
 import { PlusOutlined } from '@ant-design/icons';
 import { Upload } from 'antd';
@@ -13,13 +13,35 @@ function getBase64(file) {
   });
 }
 
-export function UploadPictures() {
+export default function UploadPictures({
+  setSubImageUrls,
+  route,
+  subImageUrls,
+}) {
   const [fileDetails, setFileDetails] = React.useState({
     previewVisible: false,
     previewImage: '',
     previewTitle: '',
     fileList: [],
   });
+
+  const fileListFromProps = (subImageUrls) =>
+    subImageUrls.reduce((arr, item) => {
+      return [
+        ...arr,
+        {
+          uid: Math.floor(Math.random() * 200) + '',
+          url: item,
+        },
+      ];
+    }, []);
+
+  // useEffect(() => {
+  //   setFileDetails({
+  //     ...fileDetails,
+  //     fileList: subImageUrls ? fileListFromProps(subImageUrls) : [],
+  //   });
+  // }, []);
 
   const handleCancel = () =>
     setFileDetails({ ...fileDetails, previewVisible: false });
@@ -37,11 +59,13 @@ export function UploadPictures() {
     });
   };
 
-  const handleChange = ({ fileList }) =>
+  const handleChange = ({ file, fileList }) => {
     setFileDetails({
       ...fileDetails,
       fileList,
     });
+    setSubImageUrls(fileList.map((file) => file.response));
+  };
 
   const { previewVisible, previewImage, fileList, previewTitle } = fileDetails;
   const uploadButton = (
@@ -51,12 +75,13 @@ export function UploadPictures() {
     </div>
   );
   return (
-    <>
+    <Fragment>
       <Upload
-        action='https://www.mocky.io/v2/5cc8019d300000980a055e76'
+        name={route}
+        method='POST'
+        action={`http://localhost:4321/upload/${route}`}
         listType='picture-card'
         fileList={fileList}
-        onPreview={handlePreview}
         onChange={handleChange}
       >
         {fileList.length >= 5 ? null : uploadButton}
@@ -69,6 +94,6 @@ export function UploadPictures() {
       >
         <img alt='example' style={{ width: '100%' }} src={previewImage} />
       </Modal>
-    </>
+    </Fragment>
   );
 }

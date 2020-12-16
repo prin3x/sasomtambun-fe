@@ -1,10 +1,10 @@
-import React, { useContext, useState } from 'react';
+import React, { Fragment, useContext, useState } from 'react';
 import styled from 'styled-components';
 import { NavLink, useHistory } from 'react-router-dom';
 import './Navbar.css';
 import LoginRegister from '../LoginRegister/LoginRegister';
 import { UserContext } from '../../context/userContext/userContext';
-import { Typography } from 'antd';
+import { Button, Typography } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 
 const NavbarContainer = styled.div`
@@ -20,7 +20,7 @@ const LogoContainer = styled.div`
   color: #000;
   cursor: pointer;
   @media (max-width: 500px) {
-    padding: 0.25rem 0.20rem;
+    padding: 0.25rem 0.2rem;
     margin-left: 12.5rem;
   }
   @media (max-width: 400px) {
@@ -56,12 +56,11 @@ const NavigatorContainer = styled.div`
   @media (max-width: 500px) {
     padding: 0rem;
   }
-
 `;
 
 const NavigatorUl = styled.ul`
   list-style: none;
-  width: 100%;
+  min-width: 100%;
   justify-content: flex-end;
   display: flex;
   margin-left: -2rem;
@@ -76,33 +75,33 @@ const NavigatorUl = styled.ul`
     position: fixed;
     height: 100%;
     z-index: 10;
-    opacity: ${({ open }) => (open ? '1':'0')};
-    transform: ${({ open }) => (open ? 'translateX(0)':'translateX(-30rem)')};
+    opacity: ${({ open }) => (open ? '1' : '0')};
+    transform: ${({ open }) => (open ? 'translateX(0)' : 'translateX(-30rem)')};
     transition: all 0.5s ease-in-out;
     & > li {
       margin-top: 2.5rem;
-      transform: ${({ open }) => (open ? 'translateX(0)':'translateX(-30rem)')};
+      transform: ${({ open }) =>
+        open ? 'translateX(0)' : 'translateX(-30rem)'};
       transition: all 0.5s ease-in-out;
-      &:nth-child(1){
+      &:nth-child(1) {
         transition-delay: 0.2s;
       }
-      &:nth-child(2){
+      &:nth-child(2) {
         transition-delay: 0.3s;
       }
-      &:nth-child(3){
+      &:nth-child(3) {
         transition-delay: 0.4s;
         margin-bottom: 5rem;
       }
     }
-    & > li:last-child{
+    & > li:last-child {
       display: none;
     }
   }
 `;
 
-
 const UserSection = styled.div`
-list-style: none;
+  list-style: none;
   display: flex;
   margin-top: 1rem;
   width: 18rem;
@@ -111,23 +110,31 @@ list-style: none;
   @media (max-width: 500px) {
     justify-content: flex-end;
   }
-`
-
+`;
 
 const NavigatorLi = styled.li`
-  padding: 0.25rem 1rem;
+  width: 4.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
+  .active {
+    border: 1px solid #fb9a2b;
+    border-radius: 2rem;
+    padding: 0.25rem 0.25rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   @media (max-width: 800px) {
-    padding: 0.25rem 0.5rem;
   }
   @media (max-width: 600px) {
-    padding: 0.25rem 0.25rem;
   }
   @media (max-width: 500px) {
-    padding: 0.25rem 0.20rem;
   }
   @media (max-width: 450px) {
-    margin-top: 0;
   }
 `;
 
@@ -136,8 +143,8 @@ const NavLinkStyle = {
 };
 
 const StyledBurger = styled.button`
-margin-top: 0.5rem;
-margin-left: 0.5rem;
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -151,7 +158,7 @@ margin-left: 0.5rem;
   display: none;
   position: fixed;
   top: 0.1%;
-  
+
   @media (max-width: 500px) {
     display: flex;
     z-index: 100;
@@ -185,7 +192,6 @@ margin-left: 0.5rem;
   }
 `;
 
-
 const Burger = ({ open, setOpen }) => {
   return (
     <StyledBurger open={open} onClick={() => setOpen(!open)}>
@@ -197,18 +203,19 @@ const Burger = ({ open, setOpen }) => {
 };
 
 export default function Navbar(props) {
-  const { role } = useContext(UserContext);
+  const { userInfo, role, logoutFromWebsite } = useContext(UserContext);
   const [open, setOpen] = useState(false);
-  const history = useHistory()
-
-
+  const history = useHistory();
 
   return (
     <NavbarContainer>
       <NavigatorContainer>
         <Burger open={open} setOpen={setOpen} />
         <LogoContainer onClick={() => history.push('/')}>
-          <img src="assets/img/logo.png" alt=""/>
+          <img
+            src='https://res.cloudinary.com/dthnl7fio/image/upload/v1608088786/sasomtambun/127531052_1017639498734055_8573310296503582026_n_a0rirr.png'
+            alt='logo'
+          />
         </LogoContainer>
         <NavigatorUl open={open}>
           <NavigatorLi onClick={() => setOpen(false)}>
@@ -216,42 +223,54 @@ export default function Navbar(props) {
               หน้าแรก
             </NavLink>
           </NavigatorLi>
-
           <NavigatorLi onClick={() => setOpen(false)}>
             <NavLink to='/activities' style={NavLinkStyle}>
               กิจกรรม
             </NavLink>
           </NavigatorLi>
-
           <NavigatorLi onClick={() => setOpen(false)}>
             <NavLink to='/donations' style={NavLinkStyle}>
               บริจาค
             </NavLink>
           </NavigatorLi>
+          <NavigatorLi>&nbsp; | &nbsp;</NavigatorLi>
 
-          <NavigatorLi>|</NavigatorLi>
-        </NavigatorUl>
-
-          {role === 'authenticated' ? (
-            <UserSection>
+          {role === 'User' ? (
+            <Fragment>
               <NavigatorLi>
                 <NavLink to='/profile' style={NavLinkStyle}>
-                <UserOutlined style={{marginRight: '1rem'}} />
-                <Typography.Text>125 Points</Typography.Text> 
+                  <UserOutlined style={{ marginRight: '1rem' }} />
                 </NavLink>
               </NavigatorLi>
-            </UserSection>
-          ) : (
-            <UserSection>
               <NavigatorLi>
-                <LoginRegister type='สมัครมาชิก' />
+                <Typography.Text>
+                  {userInfo?.available_points} Points
+                </Typography.Text>
+              </NavigatorLi>
+            </Fragment>
+          ) : role === 'Admin' ? (
+            <Fragment>
+              <NavigatorLi onClick={() => history.push('/admin/activities')}>
+                <Button type='ghost'>Admin Panel</Button>
+              </NavigatorLi>
+              <NavigatorLi style={{ marginLeft: '2rem' }}>
+                <Button type='primary' onClick={() => logoutFromWebsite()}>
+                  Logout
+                </Button>
+              </NavigatorLi>
+            </Fragment>
+          ) : (
+            <Fragment>
+              <NavigatorLi>
+                <LoginRegister type='สมัครสมาชิก' />
               </NavigatorLi>
 
               <NavigatorLi>
                 <LoginRegister type='เข้าสู่ระบบ' />
               </NavigatorLi>
-            </UserSection>
+            </Fragment>
           )}
+        </NavigatorUl>
       </NavigatorContainer>
     </NavbarContainer>
   );

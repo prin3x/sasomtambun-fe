@@ -10,8 +10,9 @@ module.exports = {
             modifyVars: {
               '@primary-color': '#f78f1e',
               '@secondary-color': '#ffc808',
-              '@border-radius-base': '16px',
+              '@success-color': '#ffc808',
               '@info-color': '@primary-color',
+              '@btn-default-bg': '#fff',
               '@font-family': [
                 'Prompt',
                 'Lato',

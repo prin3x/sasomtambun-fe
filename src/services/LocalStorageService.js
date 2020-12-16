@@ -1,9 +1,13 @@
-export const setToken = (token) => {
+export const setToken = (token, role) => {
   localStorage.setItem('ACCESS_TOKEN', token);
+  localStorage.setItem('ROLE', role);
 };
 
 export const getToken = () => {
-  return localStorage.getItem('ACCESS_TOKEN');
+  return {
+    token: localStorage.getItem('ACCESS_TOKEN'),
+    role: localStorage.getItem('ROLE'),
+  };
 };
 
 export const removeToken = () => {
@@ -11,8 +15,16 @@ export const removeToken = () => {
 };
 
 export const getRole = () => {
-  if (getToken()) {
-    return 'authenticated';
+  const { token, role } = getToken();
+  if (token) {
+    return role;
   }
-  return 'public';
+
+  return 'Public';
+};
+
+export const checkRole = (user) => {
+  const { isAdmin } = user;
+  if (isAdmin) return 'Admin';
+  return 'User';
 };

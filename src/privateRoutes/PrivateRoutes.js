@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
+import React, { Fragment, useContext } from 'react';
 import ConfigRoutes from '../config/routes';
 import { Redirect, Switch, Route } from 'react-router-dom';
 import { UserContext } from '../context/userContext/userContext';
+import AdminPage from '../pages/Adminpage';
 
 const PrivateRoutes = () => {
   const { role } = useContext(UserContext);
@@ -10,14 +11,25 @@ const PrivateRoutes = () => {
   const redirectRoutes = ConfigRoutes[role].redirect;
 
   return (
-    <Switch>
-      {allowedRoutes.map((route) => (
-        <Route exact path={route.url} key={route.url}>
-          <route.component />
-        </Route>
-      ))}
-      <Redirect to={redirectRoutes} />
-    </Switch>
+    <Fragment>
+      <Switch>
+        {allowedRoutes.map((route) =>
+          role === 'User' ? (
+            <Route
+              exact
+              path={route.url}
+              key={route.url}
+              component={route.component}
+            />
+          ) : role === 'Admin' ? (
+            <AdminPage key={route.url}>
+              <Route exact path={route.url} component={route.component} />
+            </AdminPage>
+          ) : null
+        )}
+        <Redirect to={redirectRoutes} />
+      </Switch>
+    </Fragment>
   );
 };
 

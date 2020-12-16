@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { ActivityContent } from '../components/styled-components/utilities';
 import styled from 'styled-components';
-import { Carousel, Button, Input } from 'antd';
-import { UploadPictures } from '../components/Upload/Upload';
+import { Carousel, Button, Input, Form, Modal } from 'antd';
+import UploadPictures from '../components/UploadPictures/UploadPictures';
+import axios from '../config/axios';
+import { useParams } from 'react-router-dom';
+import { CloseCircleOutlined } from '@ant-design/icons';
 const SinglePageLayout = styled.div`
   display: flex;
   padding: 0 5rem;
@@ -67,7 +70,6 @@ const SubmitArea = styled.div`
   width: 100%;
   background: #fff;
   border-radius: 0 0 15px 15px;
-  padding: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -81,74 +83,108 @@ const PointsContainer = styled.h1`
 `;
 
 export default function ActivityPage(props) {
-  const [showSubmit, setShowSubmit] = React.useState(false);
+  const [activity, setActivity] = useState();
+  const [showSubmit, setShowSubmit] = useState(false);
+  const { id } = useParams();
+  const [subImageUrls, setSubImageUrls] = useState();
+  useEffect(() => {
+    (async function () {
+      const { data } = await axios.get(`/activity/${id}`);
+      return setActivity(data);
+    })();
+    return;
+  }, [id]);
+
+  const onFinish = async (values) => {
+    try {
+      const result = await axios.post(`/proof/${id}`, {
+        description: values.description,
+        image_urls: subImageUrls,
+      });
+      if (result.status === 200) {
+        window.location.reload();
+      }
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
+  function handleError(msg) {
+    Modal.error({
+      title: 'Error Unauthorized',
+      icon: <CloseCircleOutlined />,
+      content: msg.message,
+      okText: 'Ok',
+    });
+  }
 
   return (
     <ActivityContent backgroundColor={'rgba(251, 233, 140, 0.2)'}>
-      <TitleWithMargin color='#000'>ของขวัญปีใหม่</TitleWithMargin>
-      <SinglePageLayout>
-        <ContentOnLeftSide>
-          <Carousel effect='fade'>
-            <CarouselContainerInPage>
-              <ImageContainer
-                src='https://via.placeholder.com/400x325'
-                alt=''
-              />
-            </CarouselContainerInPage>
-            <CarouselContainerInPage>
-              <ImageContainer
-                src='https://via.placeholder.com/400x325'
-                alt=''
-              />
-            </CarouselContainerInPage>
-            <CarouselContainerInPage>
-              <ImageContainer
-                src='https://via.placeholder.com/400x325'
-                alt=''
-              />
-            </CarouselContainerInPage>
-            <CarouselContainerInPage>
-              <ImageContainer
-                src='https://via.placeholder.com/400x325'
-                alt=''
-              />
-            </CarouselContainerInPage>
-          </Carousel>
-          <RuleContainer>
-            <h2>กติกา</h2>
-            <Rules>
-              ด้วยการเปลี่ยนพื้นที่ว่างซอยหน้าวัดหัวลำโพงเป็นพื้นที่สาธารณะ
-              ซึ่งสวนแห่งนี้จะเป็นสวนที่เกิดจากความร่วมมือกันทุกภาคส่วน
-              มาร่วมกันซื้อเครื่องเล่น เช่น ชิงช้า เครื่องออกกำลังกาย
-              โต๊ะเก้าอี้ มอบให้สวนสาธารณะใหม่แห่งนี้กัน
-            </Rules>
-            <h2>ระยะเวลาโครงการ</h2>
-            <Rules>เปิดใช้งานประมาณช่วงเดือนกรกฎาคม 2564</Rules>
-            <h2>หลักฐานที่ต้องแสดง</h2>
-            <Rules>พื้นที่ก่อสร้างสวนซอยหน้าวัดหัวลำโพง เขตบางรัก</Rules>
-          </RuleContainer>
-        </ContentOnLeftSide>
-        <SubmitProofContainerOnRight>
-          <TitleContainer>
-            <InpageTitle fontWeight={500} color={'#fff'}>
-              เข้าร่วมกิจกรรม
-            </InpageTitle>
-          </TitleContainer>
-          <SubmitArea>
-            <Rules>Point ที่จะได้รับในกิจกรรมนี้</Rules>
-            <PointsContainer>268</PointsContainer>
-            {showSubmit ? (
-              <React.Fragment>
-                <Input.TextArea rows={4} />
-                <UploadPictures />
-                <Button onClick={() => setShowSubmit(!true)}>ส่งหลักฐาน</Button>
-              </React.Fragment>
-            ) : (
-              <Button onClick={() => setShowSubmit(true)}>ส่งหลักฐาน</Button>
-            )}
-          </SubmitArea>
-        </SubmitProofContainerOnRight>
-      </SinglePageLayout>
+      {activity ? (
+        <Fragment>
+          <TitleWithMargin color='#000'>{activity?.title}</TitleWithMargin>
+          <SinglePageLayout>
+            <ContentOnLeftSide>
+              <Carousel effect='fade' autoplay>
+                <CarouselContainerInPage>
+                  <ImageContainer
+                    src={activity.main_image_url}
+                    alt='main image'
+                  />
+                </CarouselContainerInPage>
+                {activity.sub_image_urls ? (
+                  activity.sub_image_urls.map((image) => (
+                    <CarouselContainerInPage key={image}>
+                      <ImageContainer src={image} alt='' />
+                    </CarouselContainerInPage>
+                  ))
+                ) : (
+                  <CarouselContainerInPage></CarouselContainerInPage>
+                )}
+              </Carousel>
+              <RuleContainer>
+                <h2>กติกา</h2>
+                <Rules>{activity?.content}</Rules>
+                <h2>ระยะเวลาโครงการ</h2>
+                <Rules>เปิดใช้งานประมาณช่วงเดือนกรกฎาคม 2564</Rules>
+                <h2>หลักฐานที่ต้องแสดง</h2>
+                <Rules>พื้นที่ก่อสร้างสวนซอยหน้าวัดหัวลำโพง เขตบางรัก</Rules>
+              </RuleContainer>
+            </ContentOnLeftSide>
+            <SubmitProofContainerOnRight>
+              <TitleContainer>
+                <InpageTitle fontWeight={500} color={'#fff'}>
+                  เข้าร่วมกิจกรรม
+                </InpageTitle>
+              </TitleContainer>
+              <SubmitArea>
+                <Rules>Point ที่จะได้รับในกิจกรรมนี้</Rules>
+                <PointsContainer>{activity?.given_points}</PointsContainer>
+                {showSubmit ? (
+                  <Form onFinish={onFinish}>
+                    <Form.Item name='description'>
+                      <Input.TextArea rows={4} />
+                    </Form.Item>
+                    <Form.Item name='proof' label='อัพโหลดหลักฐาน'>
+                      <UploadPictures
+                        setSubImageUrls={setSubImageUrls}
+                        route='proof'
+                      />
+                    </Form.Item>
+                    <Form.Item>
+                      <Button htmlType='submit'>ส่งหลักฐาน</Button>
+                    </Form.Item>
+                  </Form>
+                ) : (
+                  <Button onClick={() => setShowSubmit(true)}>
+                    ส่งหลักฐาน
+                  </Button>
+                )}
+              </SubmitArea>
+            </SubmitProofContainerOnRight>
+          </SinglePageLayout>
+        </Fragment>
+      ) : null}
     </ActivityContent>
   );
 }

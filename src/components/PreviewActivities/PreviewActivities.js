@@ -1,75 +1,76 @@
-import React from 'react';
-import { Row, Col, Button } from 'antd';
+import React, { Fragment, useEffect, useState } from 'react';
+import { Button, Spin } from 'antd';
 import {
   ActivityContent,
-  Image,
-  Title,
-  Paragraph,
+  RowPreviewWrapper,
+  ItemPreviewWrapper,
+  ImagePreviewWrapper,
+  TitlePreview,
 } from '../styled-components/utilities';
+import axios from '../../config/axios';
+import { Link, useLocation } from 'react-router-dom';
+import { errorNotification } from '../antdUtils/notification';
+import { LoadingOutlined } from '@ant-design/icons';
 
-export default function PreviewActivities({ rows }) {
-  const colsArray = Array(rows ? rows : 1)
-    .fill()
-    .map((_, i) => i + 1);
+export default function PreviewActivities({ category }) {
+  const [loading, setLoading] = useState(true);
+  const [activities, setActivities] = useState();
+  let { pathname } = useLocation();
+
+  useEffect(() => {
+    (async function () {
+      try {
+        if (category) {
+          const { data } = await axios.get(
+            `/activity/?category=${category}&limit=${
+              pathname === '/activities' ? null : 6
+            }`
+          );
+          setLoading(false);
+          return setActivities(data);
+        } else {
+          const { data } = await axios.get(
+            `/activity/?limit=${pathname === '/activities' ? null : 6}`
+          );
+          setLoading(false);
+          return setActivities(data);
+        }
+      } catch (error) {
+        return errorNotification(error);
+      }
+    })();
+
+    return;
+  }, [category, pathname]);
+
+  const LoadingIcon = <LoadingOutlined style={{ fontSize: '5rem' }} spin />;
 
   return (
     <ActivityContent backgroundColor={'rgba(251, 233, 140, 0.2);'}>
-      <Row justify='center'>
-        {colsArray &&
-          colsArray.map((col, ind) => (
-            <React.Fragment key={ind}>
-              <Col xl={6} lg={{ span: 6, offset: 0 }} md={11} sm={24}>
-                <Image src='https://via.placeholder.com/300x290' alt='' />
-                <Row justify='center'>
-                  <Title>ของขวัญปีใหม่</Title>
-                  <Paragraph>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Impedit, alias! Lorem ipsum
-                  </Paragraph>
-                  <Button type='primary' shape='round'>
-                    เข้าร่วม
-                  </Button>
-                </Row>
-              </Col>
-              <Col
-                xl={{ span: 6, offset: 2 }}
-                lg={{ span: 6, offset: 2 }}
-                md={11}
-                sm={24}
-              >
-                <Image src='https://via.placeholder.com/300x290' alt='' />
-                <Row justify='center'>
-                  <Title>รีไซเคิลขวด</Title>
-                  <Paragraph>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Impedit, Lorem ipsum dolor
-                  </Paragraph>
-                  <Button type='primary' shape='round'>
-                    เข้าร่วม
-                  </Button>
-                </Row>
-              </Col>
-              <Col
-                xl={{ span: 6, offset: 2 }}
-                lg={{ span: 6, offset: 2 }}
-                md={0}
-                sm={0}
-              >
-                <Image src='https://via.placeholder.com/300x290' alt='' />
-                <Row justify='center'>
-                  <Title>สร้างเสริมสุขภาพ</Title>
-                  <Paragraph>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Impedit, alias! Lorem ipsum,
-                  </Paragraph>
-                  <Button type='primary' shape='round'>
-                    เข้าร่วม
-                  </Button>
-                </Row>
-              </Col>
-            </React.Fragment>
-          ))}
-      </Row>
+      <RowPreviewWrapper>
+        {activities ? (
+          activities.map((item) => (
+            <ItemPreviewWrapper key={item._id}>
+              <ImagePreviewWrapper
+                src={item.main_image_url}
+                alt='placeholder'
+              />
+              <TitlePreview>{item.title}</TitlePreview>
+              <p>{item.short_desc}</p>
+              <span>เข้าร่วมแล้ว {item.participants} คน</span>
+              <Link to={`/activities/${item._id}`}>
+                <Button type='primary' shape='round'>
+                  เข้าร่วม
+                </Button>
+              </Link>
+            </ItemPreviewWrapper>
+          ))
+        ) : (
+          <Fragment>
+            <Spin indicator={LoadingIcon} spinning={loading} />
+          </Fragment>
+        )}
+      </RowPreviewWrapper>
     </ActivityContent>
   );
 }

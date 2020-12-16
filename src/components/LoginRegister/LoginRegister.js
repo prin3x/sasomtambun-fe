@@ -5,13 +5,13 @@ import { Login } from '../Login/Login';
 import RegistrationForm from '../Register/Register';
 import './LoginRegister.less';
 import { CloseCircleFilled } from '@ant-design/icons';
+import styled from 'styled-components';
 
 const { TabPane } = Tabs;
 
 export default function LoginRegister({ type }) {
   const [visible, setVisible] = React.useState(false);
   const [confirmLoading, setConfirmLoading] = React.useState(false);
-  const [modalText, setModalText] = React.useState('Content of the modal');
 
   const toggleModal = () => {
     setVisible(!visible);
@@ -27,7 +27,7 @@ export default function LoginRegister({ type }) {
   }
 
   return (
-    <React.Fragment>
+    <section className='ghost'>
       <Typography.Text onClick={toggleModal}>{type}</Typography.Text>
       <Modal
         visible={visible}
@@ -68,6 +68,6 @@ export default function LoginRegister({ type }) {
           </TabPane>{' '}
         </Tabs>
       </Modal>
-    </React.Fragment>
+    </section>
   );
 }

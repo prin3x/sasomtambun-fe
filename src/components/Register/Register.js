@@ -1,15 +1,12 @@
-import React, { useContext, useState } from 'react';
-import { Form, Input, Tooltip, Select, notification, Button } from 'antd';
+import React, { useState } from 'react';
+import { Form, Input, Tooltip, Button } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import './Register.less';
 import axios from '../../config/axios';
-import { getRole, setToken } from '../../services/LocalStorageService';
-import { useHistory } from 'react-router-dom';
 import {
   errorNotification,
   successNotification,
 } from '../antdUtils/notification';
-import { UserContext } from '../../context/userContext/userContext';
 
 const formItemLayout = {
   labelAlign: 'left',
@@ -25,32 +22,27 @@ const formItemLayout = {
 
 const RegistrationForm = ({ toggleModal }) => {
   const [form] = Form.useForm();
-  const history = useHistory();
-  const { loginIntoWebsite } = useContext(UserContext);
 
   const [submitLoading, setSubmitLoading] = useState(false);
 
   const onFinish = async (values) => {
     setSubmitLoading(true);
-    const { email, password, phone } = values;
 
     try {
-      const response = await axios.post('/auth/local/register', {
-        email,
-        password,
-        username: phone,
+      const { data } = await axios.post('/auth/register', {
+        ...values,
       });
-      loginIntoWebsite(response.data.jwt);
+
       setTimeout(() => {
         setSubmitLoading(false);
-        successNotification('topRight');
+        successNotification(data.message);
         toggleModal();
-        history.push('/home');
+        window.location.reload();
       }, 500);
     } catch (error) {
       setTimeout(() => {
         setSubmitLoading(false);
-        errorNotification('topRight');
+        errorNotification(error);
       }, 500);
     }
   };
@@ -120,7 +112,7 @@ const RegistrationForm = ({ toggleModal }) => {
       </Form.Item>
 
       <Form.Item
-        name='firstname'
+        name='fname'
         label={
           <span>
             ชื่อ&nbsp;
@@ -140,7 +132,7 @@ const RegistrationForm = ({ toggleModal }) => {
         <Input placeholder='ชื่อ' />
       </Form.Item>
       <Form.Item
-        name='lastname'
+        name='lname'
         label={
           <span>
             นามสกุล&nbsp;

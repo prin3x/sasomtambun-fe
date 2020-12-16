@@ -2,7 +2,7 @@ import { Fragment, useContext } from 'react';
 import styled from 'styled-components';
 import { ReactComponent as UserProfile } from '../../assets/svg/profile.svg';
 import { Title, Lead, InputInfo } from '../styled-components/utilities';
-import { Button, Typography } from 'antd';
+import { Button, Typography, Avatar } from 'antd';
 import { UserContext } from '../../context/userContext/userContext';
 
 const { Text } = Typography;
@@ -56,7 +56,7 @@ const ImageAndPoint = styled.div`
 `;
 
 const InfoContainer = styled.div`
-  width: 50rem;
+  width: 40rem;
   height: 100%;
   background: #fff;
   border-radius: 15px;
@@ -120,60 +120,59 @@ const FieldWrapper = styled.div`
   display: flex;
 `;
 
-const mockData = {
-  อีเมล: 'sunita@gmail.com',
-  ชื่อ: 'สุนิตา',
-  นามสกุล: 'จันทร์ดี',
-  เบอร์โทร: '0847579813',
-  แผนก: 'Human',
-};
-
 export default function UserInfoContainer() {
-  const { logoutFronWebsite } = useContext(UserContext);
+  const { userInfo, logoutFromWebsite } = useContext(UserContext);
 
+  const {
+    available_points,
+    email,
+    department,
+    fname,
+    lname,
+    phone,
+    avartar_url,
+  } = userInfo;
   return (
     <Fragment>
       <Wrapper>
         <ControllerContainer>
           <ImageAndPoint>
-            <UserProfile />
-            <Title color='#FD6B0D'>สุนิตา จันทร์ดี</Title>
+            <Avatar size={126} />
             <Title color='#FD6B0D'>
-              125 <span style={{ color: '#000' }}>Point</span>
+              {available_points} <span style={{ color: '#000' }}>Point</span>
             </Title>
           </ImageAndPoint>
-          <Button type='primary' danger onClick={logoutFronWebsite}>
+          <Button type='primary' danger onClick={logoutFromWebsite}>
             Log Out
           </Button>
         </ControllerContainer>
         <InfoContainer>
-          <Lead>แก้ไขโปรไฟล์</Lead>
           <AccountInfo>
             <Title color='#FD6B0D'>บัญชีของคุณ</Title>
             <FieldWrapper>
               <FieldContainer>
                 <Text>อีเมล</Text>
-                <InputInfo>{mockData.อีเมล}</InputInfo>
+                <InputInfo>{email}</InputInfo>
               </FieldContainer>
             </FieldWrapper>
             <FieldWrapper>
               <FieldContainer>
                 <Text>ชื่อ</Text>
-                <InputInfo>{mockData.ชื่อ}</InputInfo>
+                <InputInfo>{fname}</InputInfo>
               </FieldContainer>
               <FieldContainer>
                 <Text>นามสกุล</Text>
-                <InputInfo>{mockData.นามสกุล}</InputInfo>
+                <InputInfo>{lname}</InputInfo>
               </FieldContainer>
             </FieldWrapper>
             <FieldWrapper>
               <FieldContainer>
                 <Text>เบอร์โทร</Text>
-                <InputInfo>{mockData.เบอร์โทร}</InputInfo>
+                <InputInfo>{phone}</InputInfo>
               </FieldContainer>
               <FieldContainer>
                 <Text>แผนก</Text>
-                <InputInfo>{mockData.แผนก}</InputInfo>
+                <InputInfo>{department}</InputInfo>
               </FieldContainer>
             </FieldWrapper>
             {/* <FieldWrapper>

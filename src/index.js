@@ -4,10 +4,13 @@ import './index.less';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
+import { UserContextProvider } from './context/userContext/userContext';
 
 ReactDOM.render(
   <BrowserRouter>
-    <App />
+    <UserContextProvider>
+      <App />
+    </UserContextProvider>
   </BrowserRouter>,
   document.getElementById('root')
 );

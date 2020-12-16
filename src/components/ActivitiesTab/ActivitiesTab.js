@@ -17,8 +17,8 @@ const ActivityShowcaseContainer = styled.div`
   height: 100%;
 `;
 const ActivityShowcase = styled.div`
-  width: 10rem;
-  height: 10rem;
+  width: 7.5rem;
+  height: 7.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -29,10 +29,9 @@ const ActivityShowcase = styled.div`
 `;
 
 const Subtitle = styled.h3`
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: 300;
 `;
-
 
 export default function ActivitiesTab({ rows }) {
   function callback(key) {
@@ -47,12 +46,23 @@ export default function ActivitiesTab({ rows }) {
     <ActivityShowcaseContainer>
       <MainSectionHeader>กิจกรรม</MainSectionHeader>
       <Tabs
-        defaultActiveKey='1'
+        defaultActiveKey='0'
         onChange={callback}
         centered
-        tabBarGutter={50}
+        tabBarGutter={35}
         size='large'
       >
+        <TabPane
+          tab={
+            <ActivityShowcase>
+              <Donate onClick={handleClick} />
+              <Subtitle>ทั้งหมด</Subtitle>
+            </ActivityShowcase>
+          }
+          key='0'
+        >
+          <PreviewActivities />
+        </TabPane>
         <TabPane
           tab={
             <ActivityShowcase>
@@ -62,7 +72,7 @@ export default function ActivitiesTab({ rows }) {
           }
           key='1'
         >
-          <PreviewActivities rows={rows} />
+          <PreviewActivities category='บริจาค' />
         </TabPane>
         <TabPane
           tab={
@@ -73,7 +83,7 @@ export default function ActivitiesTab({ rows }) {
           }
           key='2'
         >
-          <PreviewActivities />
+          <PreviewActivities category='สุขภาพ' />
         </TabPane>
         <TabPane
           tab={
@@ -84,7 +94,7 @@ export default function ActivitiesTab({ rows }) {
           }
           key='3'
         >
-          <PreviewActivities />
+          <PreviewActivities category='ความรู้' />
         </TabPane>
         <TabPane
           tab={
@@ -95,7 +105,7 @@ export default function ActivitiesTab({ rows }) {
           }
           key='4'
         >
-          <PreviewActivities />
+          <PreviewActivities category='เป้าหมาย_7_วัน' />
         </TabPane>
         <TabPane
           tab={
@@ -112,12 +122,12 @@ export default function ActivitiesTab({ rows }) {
           tab={
             <ActivityShowcase>
               <Project />
-              <Subtitle>โปรเจค</Subtitle>
+              <Subtitle>สินค้า</Subtitle>
             </ActivityShowcase>
           }
           key='6'
         >
-          <PreviewActivities rows={rows} />
+          <PreviewActivities category='สินค้า' />
         </TabPane>
       </Tabs>
     </ActivityShowcaseContainer>

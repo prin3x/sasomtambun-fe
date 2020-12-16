@@ -1,4 +1,3 @@
-import React from 'react';
 import { Tabs } from 'antd';
 import UserInfoContainer from '../UserInfoContainer/UserInfoContainer';
 import styled from 'styled-components';
@@ -28,7 +27,7 @@ const AlterAntd = styled.div`
 export default function UserProfileTabs() {
   return (
     <AlterAntd>
-      <Tabs defaultActiveKey='1'centered size='large'>
+      <Tabs defaultActiveKey='1' centered size='large'>
         <TabPane tab={'โปรไฟล์ของฉัน'} key='1'>
           <UserInfoContainer />
         </TabPane>
@@ -38,7 +37,7 @@ export default function UserProfileTabs() {
         <TabPane tab={'ประวัติการบริจาค'} key='3'>
           <UserDonationHistory />
         </TabPane>
-        <TabPane tab={'เหรียญรางวัล'} key='4'></TabPane>
+        {/* <TabPane tab={'เหรียญรางวัล'} key='4'></TabPane> */}
       </Tabs>
     </AlterAntd>
   );

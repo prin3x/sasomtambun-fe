@@ -1,16 +1,16 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Table, Tag } from 'antd';
-
+import axios from '../../config/axios';
 const columns = [
   {
     title: 'โครงการที่ได้บริจาค',
-    dataIndex: 'donation',
-    key: 'donation',
+    dataIndex: 'title',
+    key: 'title',
   },
   {
     title: 'Point ที่บริจาค',
-    dataIndex: 'point',
-    key: 'point',
+    dataIndex: 'donate_points',
+    key: 'donate_points',
   },
   {
     title: 'สถานะ',
@@ -19,34 +19,41 @@ const columns = [
     render: (status) => (
       <Fragment>
         <Tag color={status === 'ส่งมอบแล้ว' ? 'green' : 'blue'} key={status}>
-          {status.toUpperCase()}
+          {status?.toUpperCase()}
         </Tag>
       </Fragment>
     ),
   },
 ];
 
-const dataSource = [
-  {
-    key: '1',
-    donation: 'เทใจเพื่อน้อง 1',
-    point: 250,
-    status: 'ส่งมอบแล้ว',
-    remark: '',
-  },
-  {
-    key: '2',
-    donation: 'เทใจเพื่อน้อง 1',
-    point: 250,
-    status: 'อยู่ระหว่างการระดมทุน',
-    remark: 'ภาพไม่ครบ',
-  },
-];
-
 export default function UserDonationHistory() {
+  const [pastDonations, setPastDonations] = useState();
+
+  useEffect(() => {
+    (async function () {
+      const { data } = await axios.get(`/donate/mydonation`);
+      return setPastDonations(data);
+    })();
+    return;
+  }, []);
+
+  const rowData =
+    pastDonations &&
+    pastDonations.map((item) => {
+      return {
+        id: item._id,
+        title: item.donation?.title,
+        donate_points: item.donate_points,
+        status: item.donation?.status,
+      };
+    });
   return (
     <Fragment>
-      <Table dataSource={dataSource} columns={columns} />
+      <Table
+        dataSource={rowData ? rowData : null}
+        columns={columns}
+        rowKey={(record) => record.id}
+      />
     </Fragment>
   );
 }
