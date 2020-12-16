@@ -11,6 +11,7 @@ import axios from '../../config/axios';
 import { Link, useLocation } from 'react-router-dom';
 import { errorNotification } from '../antdUtils/notification';
 import { LoadingOutlined } from '@ant-design/icons';
+import Spinner from '../Spinner/Spinner';
 
 export default function PreviewActivities({ category }) {
   const [loading, setLoading] = useState(true);
@@ -66,9 +67,7 @@ export default function PreviewActivities({ category }) {
             </ItemPreviewWrapper>
           ))
         ) : (
-          <Fragment>
-            <Spin indicator={LoadingIcon} spinning={loading} />
-          </Fragment>
+          <Spinner />
         )}
       </RowPreviewWrapper>
     </ActivityContent>

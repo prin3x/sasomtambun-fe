@@ -3,6 +3,7 @@ import React, { Fragment, useEffect } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Upload } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
+import { BASE_BACKEND_URL } from '../../config/constants';
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -79,7 +80,7 @@ export default function UploadPictures({
       <Upload
         name={route}
         method='POST'
-        action={`http://localhost:4321/upload/${route}`}
+        action={`${BASE_BACKEND_URL}/upload/${route}`}
         listType='picture-card'
         fileList={fileList}
         onChange={handleChange}

@@ -1,4 +1,5 @@
 import { Upload } from 'antd';
+import { BASE_BACKEND_URL } from '../../config/constants';
 import { getBase64, checkFileExtendsionAndSize } from '../../utils/imageUtils';
 
 export default function UploadSingle({ mainImage, setMainImage, route }) {
@@ -21,7 +22,7 @@ export default function UploadSingle({ mainImage, setMainImage, route }) {
       listType='picture-card'
       className='main-uploader'
       showUploadList={false}
-      action={`http://localhost:4321/upload/${route}`}
+      action={`${BASE_BACKEND_URL}/upload/${route}`}
       method='post'
       beforeUpload={checkFileExtendsionAndSize}
       onChange={handleUpload}

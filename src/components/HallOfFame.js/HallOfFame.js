@@ -44,7 +44,7 @@ export default function HallOfFame() {
       <RowPreviewWrapper>
         {mocks
           ? mocks.map((each) => (
-              <BoxContentWrapper>
+              <BoxContentWrapper key={each.name}>
                 <Avatar size={128} src={each.avatar} />
                 <Card
                   style={{

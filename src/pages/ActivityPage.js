@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Carousel, Button, Input, Form, Modal } from 'antd';
 import UploadPictures from '../components/UploadPictures/UploadPictures';
 import axios from '../config/axios';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { CloseCircleOutlined } from '@ant-design/icons';
 const SinglePageLayout = styled.div`
   display: flex;
@@ -87,6 +87,7 @@ export default function ActivityPage(props) {
   const [showSubmit, setShowSubmit] = useState(false);
   const { id } = useParams();
   const [subImageUrls, setSubImageUrls] = useState();
+  const history = useHistory();
   useEffect(() => {
     (async function () {
       const { data } = await axios.get(`/activity/${id}`);
@@ -102,7 +103,7 @@ export default function ActivityPage(props) {
         image_urls: subImageUrls,
       });
       if (result.status === 200) {
-        window.location.reload();
+        history.push(`/activities/${id}`);
       }
     } catch (error) {
       handleError(error);

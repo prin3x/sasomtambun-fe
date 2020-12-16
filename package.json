@@ -2,6 +2,7 @@
   "name": "sasomtambun",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:4321",
   "dependencies": {
     "@ant-design/icons": "^4.3.0",
     "@craco/craco": "^5.8.0",

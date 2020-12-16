@@ -9,6 +9,7 @@ import { ReactComponent as Csc } from '../../assets/svg/csc.svg';
 import { ReactComponent as Challenge } from '../../assets/svg/challenge.svg';
 import { ReactComponent as Project } from '../../assets/svg/project.svg';
 import { MainSectionHeader } from '../styled-components/utilities';
+import Spinner from '../Spinner/Spinner';
 
 const { TabPane } = Tabs;
 

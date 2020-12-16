@@ -1,6 +1,6 @@
 import 'antd/dist/antd.less';
 import Navbar from './components/Navbar/Navbar';
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import Homepage from './pages/Homepage';
 import Activities from './pages/Activities';
 import Donations from './pages/Donations';
@@ -24,7 +24,9 @@ function App() {
         <Route exact path='/donations/:id' component={SingleDonationPage} />
         <UserRoutes exact path='/profile' component={UserProfilePage} />
         <AdminRoutes path='/admin' component={AdminPage} />
-        <Route path='*' component={Homepage} />
+        <Route path='*'>
+          <Redirect to='/home' />
+        </Route>
       </Switch>
     </Fragment>
   );

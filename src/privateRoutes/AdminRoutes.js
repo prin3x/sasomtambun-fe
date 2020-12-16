@@ -16,8 +16,6 @@ function AdminRoutes({ component: Component, ...rest }) {
           return <Spin indicator={antIcon} />;
         } else if (role === 'Admin') {
           return <Component />;
-        } else {
-          return <Redirect to='/home' />;
         }
       }}
     />

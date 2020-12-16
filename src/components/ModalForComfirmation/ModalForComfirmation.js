@@ -40,7 +40,7 @@ export default function ModalForComfirmation({
     try {
       await axios.patch('/proof', { id: _id, status: 'success', user_id });
       setModalVisible(false);
-      window.location.reload();
+      history.push(`/admin/confirm-request`);
     } catch (error) {
       errorNotification(error);
     }
@@ -69,11 +69,11 @@ export default function ModalForComfirmation({
     <Fragment>
       <Modal
         title='หลักฐาน'
+        footer={null}
         onCancel={() => setModalVisible(false)}
         onOk={handleSuccessPublish}
         visible={visible}
         width={'40rem'}
-        footer={null}
         closeIcon={
           <CloseCircleFilled
             style={{

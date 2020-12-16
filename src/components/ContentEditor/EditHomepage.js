@@ -8,6 +8,7 @@ import { ButtonStyle } from '../styled-components/utilities';
 import { errorNotification } from '../antdUtils/notification';
 import { SketchPicker } from 'react-color';
 import SketchPickerCom from '../SketchPickerCom/SketchPicker';
+import { BASE_BACKEND_URL } from '../../config/constants';
 
 const ContentEditorFlexWrapper = styled.div`
   padding: 0 5rem;
@@ -194,7 +195,7 @@ export default function EditHomepage() {
             name='homepic'
             listType='picture-card'
             showUploadList={false}
-            action='http://localhost:4321/upload/homepic'
+            action={`${BASE_BACKEND_URL}/upload/homepic`}
             method='post'
             beforeUpload={checkFileExtendsionAndSize}
             onChange={(info) => handleUpload(info, setDesktopImage)}
@@ -215,7 +216,7 @@ export default function EditHomepage() {
             name='homepic'
             listType='picture-card'
             showUploadList={false}
-            action='http://localhost:4321/upload/homepic'
+            action={`${BASE_BACKEND_URL}/upload/homepic`}
             method='post'
             beforeUpload={checkFileExtendsionAndSize}
             onChange={(info) => handleUpload(info, setTabletImage)}
@@ -236,7 +237,7 @@ export default function EditHomepage() {
             name='homepic'
             listType='picture-card'
             showUploadList={false}
-            action='http://localhost:4321/upload/homepic'
+            action={`${BASE_BACKEND_URL}/upload/homepic`}
             method='post'
             beforeUpload={checkFileExtendsionAndSize}
             onChange={(info) => handleUpload(info, setMobileImage)}

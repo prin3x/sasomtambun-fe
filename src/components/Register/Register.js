@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Form, Input, Tooltip, Button } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import './Register.less';
@@ -7,6 +7,9 @@ import {
   errorNotification,
   successNotification,
 } from '../antdUtils/notification';
+import { setToken } from '../../services/LocalStorageService';
+import { useHistory } from 'react-router-dom';
+import { UserContext } from '../../context/userContext/userContext';
 
 const formItemLayout = {
   labelAlign: 'left',
@@ -22,22 +25,28 @@ const formItemLayout = {
 
 const RegistrationForm = ({ toggleModal }) => {
   const [form] = Form.useForm();
-
+  const history = useHistory();
   const [submitLoading, setSubmitLoading] = useState(false);
+  const { retrieveUserInfo } = useContext(UserContext);
 
   const onFinish = async (values) => {
     setSubmitLoading(true);
 
     try {
-      const { data } = await axios.post('/auth/register', {
-        ...values,
-      });
-
+      const { data } = await axios.post(
+        '/auth/register',
+        {
+          ...values,
+        },
+        { credentials: true }
+      );
+      setToken(data.token);
+      retrieveUserInfo();
       setTimeout(() => {
         setSubmitLoading(false);
         successNotification(data.message);
         toggleModal();
-        window.location.reload();
+        history.push('/home');
       }, 500);
     } catch (error) {
       setTimeout(() => {

@@ -16,18 +16,17 @@ const SelectWrapper = styled.div`
 `;
 
 export default function DonateModal({ pop, setPop }) {
-  const [value, setValue] = useState();
   const [form] = useForm();
   const { id } = useParams();
   const [successSubmit, setSuccessSubmit] = useState(false);
   const [failureSubmit, setFailureSubmit] = useState(false);
   const history = useHistory();
 
-  function handleError() {
+  function handleError(message) {
     Modal.error({
       title: 'Error Unauthorized',
       icon: <CloseCircleOutlined />,
-      content: 'Make Sure You are logged in',
+      content: message,
       okText: 'Ok',
     });
   }
@@ -43,14 +42,11 @@ export default function DonateModal({ pop, setPop }) {
         }, 1000);
       }
     } catch (error) {
-      if (error.response.data === 'Unauthorized') {
-        handleError();
-      } else {
-        setFailureSubmit(true);
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
-      }
+      handleError(error.response.message);
+      setSuccessSubmit(false);
+      setTimeout(() => {
+        setFailureSubmit(false);
+      }, 1000);
     }
   };
 
@@ -83,15 +79,9 @@ export default function DonateModal({ pop, setPop }) {
         <Result
           icon={<SmileOutlined />}
           title='Great, we have done all the operations!'
+          subTitle='This is text'
         />
         ,
-      </Modal>
-      <Modal visible={failureSubmit} footer={null}>
-        <Result
-          status='error'
-          title='พ้อยท์ที่เหลืออยู่ไม่เพียงพอ'
-          subTitle='โปรดตรวจสอบจำนวนพ้อนท์เหลืออยู่ของคุณ'
-        />
       </Modal>
     </Fragment>
   );

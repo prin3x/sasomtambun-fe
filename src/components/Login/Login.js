@@ -7,6 +7,7 @@ import {
   successNotification,
 } from '../antdUtils/notification';
 import { UserContext } from '../../context/userContext/userContext';
+import { setToken } from '../../services/LocalStorageService';
 
 const layout = {
   labelCol: { span: 24 },
@@ -31,14 +32,15 @@ export const Login = ({ toggleModal }) => {
           email,
           password,
         },
-        { credentials: true }
+        { withCredentials: true }
       );
+      setToken(data.token);
       retrieveUserInfo();
       setTimeout(() => {
         setSubmitLoading(false);
         successNotification();
         toggleModal();
-        window.location.reload();
+        history.push('/home');
       }, 500);
     } catch (error) {
       errorNotification('topRight');

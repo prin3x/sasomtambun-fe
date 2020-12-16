@@ -2,18 +2,17 @@ import axios from 'axios';
 import { getToken } from '../services/LocalStorageService';
 import { BASE_BACKEND_URL } from './constants';
 
-axios.defaults.baseURL = BASE_BACKEND_URL;
 axios.defaults.withCredentials = true;
-// axios.interceptors.request.use((config) => {
-//   if (config.url.match(/ \/login|\/register /)) return config;
+axios.interceptors.request.use((config) => {
+  if (config.url.match(/ \/login|\/register /)) return config;
 
-//   const { token } = getToken();
+  const token = getToken();
 
-//   if (token) {
-//     config.headers['Authorization'] = `Bearer ${token}`;
-//   }
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`;
+  }
 
-//   return config;
-// });
+  return config;
+});
 
 export default axios;
